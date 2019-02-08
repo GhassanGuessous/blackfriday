@@ -1,13 +1,15 @@
 package com.indev.blackfriday;
 
-import java.util.ArrayList;
-
 public class Company {
 
     private int totalAssets = 0;
     private int stock = 0;
+    private boolean blackFriday = false;
+
     private static final int SELL_UNIT = 5;
     private static final float NORMAL_MARGIN = 0.2f;
+    private static final int BLACK_FRIDAY_SELL_UNIT = 10;
+    private static final float BLACK_FRIDAY_MARGIN = 0.1f;
 
     /**private Stock stock;
 
@@ -19,14 +21,18 @@ public class Company {
         ProductEnum  product = ProductEnum.getProduct(productName);
 
         int pureSellPrice = product.getPrice() * SELL_UNIT;
+        System.out.println("=>" + pureSellPrice);
         float margin = pureSellPrice * NORMAL_MARGIN;
         int sellPrice = (int) (pureSellPrice + margin);
 
-        stock -= SELL_UNIT;
-        totalAssets -= pureSellPrice;
-        totalAssets += sellPrice;
+        editSalesRevenue((int) margin);
 
         return sellPrice;
+    }
+
+    public void editSalesRevenue(int margin){
+        stock -= SELL_UNIT;
+        totalAssets += margin;
     }
 
     public void stock(int quantite, String name, int price) {
@@ -36,8 +42,9 @@ public class Company {
             Product product = new Product(name, price);
             stock.getProducts().add(product);
         }*/
-        this.stock = quantite;
+        stock = quantite;
         totalAssets += price * quantite;
+        System.out.println(totalAssets);
     }
 
     public Company to(int i) {
@@ -59,6 +66,7 @@ public class Company {
     }
 
     public Company blackFriday() {
+        blackFriday = true;
         return this;
     }
 }
