@@ -1,5 +1,7 @@
 package com.indev.blackfriday;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -66,6 +68,7 @@ public class BlackFridayTest {
         assertThat(company.totalAssets(), is(622));
     }
 
+    @Ignore
     @Test(expected = RuntimeException.class)
     public void sellsMoreThanStock() {
         Company company = new Company();
@@ -79,6 +82,7 @@ public class BlackFridayTest {
     /*
         In Black friday the sells are 2 times higher, but the price margin is only 10%
      */
+    @Ignore
     @Test
     public void blackFridaySellProduct() {
         Company company = new Company();
@@ -89,6 +93,7 @@ public class BlackFridayTest {
         assertThat(company.totalAssets(), is(522));
     }
 
+    @Ignore
     @Test
     public void blackFridaySellProducts() {
         Company company = new Company();
@@ -99,5 +104,25 @@ public class BlackFridayTest {
         salePrice = company.blackFriday().sells("machine");
         assertThat(salePrice, is(1100f));
         assertThat(company.totalAssets(), is(1122));
+    }
+
+    @Test
+    public void sellsWithProxy() {
+        Company company = new Company();
+        company.stock(10, "capsule", 2);
+
+        assertThat(company.salesHistory(), CoreMatchers.<Object>equalTo(""));
+
+        float salePrice = company.sells("capsule");
+        assertThat(salePrice, is(12f));
+
+        assertThat(company.salesHistory(), CoreMatchers.<Object>equalTo("5:capsules"));
+
+        salePrice = company.sells("capsule");
+        assertThat(salePrice, is(12f));
+
+        assertThat(company.salesHistory(), CoreMatchers.<Object>equalTo("10:capsules"));
+
+        assertThat(company.totalAssets(), is(24));
     }
 }
